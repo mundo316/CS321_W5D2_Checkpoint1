@@ -19,11 +19,22 @@ namespace CS321_W5D2_BlogAPI.Core.Services
 
         public Post Add(Post newPost)
         {
-            // TODO: Prevent users from adding to a blog that isn't theirs
+            // : Prevent users from adding to a blog that isn't theirs
             //     Use the _userService to get the current users id.
             //     You may have to retrieve the blog in order to check user id
-            // TODO: assign the current date to DatePublished
-            return _postRepository.Add(newPost);
+            // : assign the current date to DatePublished
+            var currentUserId = _userService.CurrentUserId;
+            var blog = _blogRepository.Get(newPost.BlogId);
+            if (currentUserId == blog.UserId)
+            {
+                newPost.DatePublished = DateTime.Now;
+                return _postRepository.Add(newPost);
+            }
+            else
+            {
+                throw new ApplicationException("This is not your blog!");
+            }
+
         }
 
         public Post Get(int id)
@@ -44,13 +55,33 @@ namespace CS321_W5D2_BlogAPI.Core.Services
         public void Remove(int id)
         {
             var post = this.Get(id);
-            // TODO: prevent user from deleting from a blog that isn't theirs
+            // : prevent user from deleting from a blog that isn't theirs
+            var currentId = _userService.CurrentUserId;
+            var blog = _blogRepository.Get(post.BlogId);
+            if (currentId == blog.UserId)
+            {
+                _postRepository.Remove(id);
+            }
+            else
+            {
+                throw new ApplicationException("You do not have permission to change this blog!");
+            }
             _postRepository.Remove(id);
         }
 
         public Post Update(Post updatedPost)
         {
-            // TODO: prevent user from updating a blog that isn't theirs
+            // : prevent user from updating a blog that isn't theirs
+            var currentId = _userService.CurrentUserId;
+            var blog = _blogRepository.Get(updatedPost.BlogId);
+            if (currentId == blog.UserId)
+            {
+                return _postRepository.Update(updatedPost);
+            }
+            else
+            {
+                throw new ApplicationException("You do not have permission to change this blog!");
+            }
             return _postRepository.Update(updatedPost);
         }
 

@@ -53,8 +53,17 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
 
         public void Remove(int id)
         {
-            // TODO: remove blog
-            throw new NotImplementedException();
+            // : remove blog
+            var currentBlog = this.Get(id);
+            if (currentBlog != null)
+            {
+                _dbContext.Blogs.Remove(currentBlog);
+                _dbContext.SaveChanges();
+            }
+            //else
+            //{
+            //    throw new Exception("Cannot remove a Blog that does not exist!");
+            //}
         }
     }
 }
