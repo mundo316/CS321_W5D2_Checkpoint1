@@ -19,6 +19,9 @@ namespace CS321_W5D2_BlogAPI.ApiModels
                 BlogId = post.BlogId,
                 DatePublished = post.DatePublished,
                 // TODO: map blogName and authorName
+                AuthorName = post./////////
+                
+                
 			};
 		}
 
